@@ -57,3 +57,11 @@ class CreateUser(generics.CreateAPIView):
             status=status.HTTP_201_CREATED,
             headers=headers
         )
+
+
+class LogoutUser(views.APIView):
+    queryset = get_user_model().objects.all()
+
+    def get(self, request, format=None):
+        # just remove the token to force a login
+        request.user.auth_token.delete()
