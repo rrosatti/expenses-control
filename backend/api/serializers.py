@@ -1,19 +1,11 @@
 from rest_framework import serializers
-from .models import Expense, UserExpense, UserCustom
+from .models import Expense, UserCustom
 from django.contrib.auth import get_user_model
 
 
 class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
-        fields = '__all__'
-
-
-class UserExpenseSerializer(serializers.ModelSerializer):
-    expenses = ExpenseSerializer(many=True, required=False)
-
-    class Meta:
-        model = UserExpense
         fields = '__all__'
 
 
