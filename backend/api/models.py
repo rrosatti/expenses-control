@@ -11,6 +11,15 @@ class Expense(models.Model):
     long_desc = models.CharField(max_length=400)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def to_json(self):
+        return {
+            "value": self.value,
+            "date": self.date,
+            "short_desc": self.short_desc,
+            "long_desc": self.long_desc,
+            "user": self.user__username,
+        }
+
     def __str__(self):
         return "%s/%s/%s - $ %s (%s)" % \
             (self.date__year, self.date__month,
