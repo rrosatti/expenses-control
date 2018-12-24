@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 
 
 class Expense(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     id = models.AutoField(primary_key=True)
     value = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField(_("Date"), default=datetime.date.today)
@@ -18,6 +19,7 @@ class Expense(models.Model):
             "date": self.date,
             "short_desc": self.short_desc,
             "long_desc": self.long_desc,
+            "username": self.user__username,
         }
 
     def __str__(self):
@@ -27,20 +29,6 @@ class Expense(models.Model):
 
     class Meta:
         ordering = ('-date__year', '-date__month', '-date__day',)
-
-
-class UserExpense(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    expense = models.ForeignKey(Expense, on_delete=models.CASCADE)
-
-    def to_json(self):
-        return {
-            "username": self.user__username,
-            "expense": self.expense.to_json(),
-        }
-
-    def __str__(self):
-        return "%s - $ %s" % (self.user__username, self.expense__value)
 
 
 class UserCustom(models.Model):
