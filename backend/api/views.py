@@ -1,7 +1,10 @@
-from rest_framework import generics
+from django.contrib.auth import get_user_model
+from rest_framework import generics, permissions, response
+from rest_framework import views, status
+from rest_framework.authtoken.models import Token
 from .models import Expense, UserExpense, UserCustom
 from .serializers import ExpenseSerializer, UserExpenseSerializer,\
-    UserCustomSerializer
+    UserCustomSerializer, CreateUserSerializer
 
 
 class ExpenseList(generics.ListCreateAPIView):
@@ -35,3 +38,22 @@ class UserExpenseList(generics.ListCreateAPIView):
 class UserExpenseDetail(generics.RetrieveDestroyAPIView):
     queryset = UserExpense.objects.all()
     serializer_class = UserExpenseSerializer
+
+
+class CreateUser(generics.CreateAPIView):
+    serializer_class = CreateUserSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        token = Token.objects.create(user=serializer.instance)
+        token_data = {'token': token.key}
+        return response.Response(
+            {**serializer.data, **token_data},
+            status=status.HTTP_201_CREATED,
+            headers=headers
+        )
