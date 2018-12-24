@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions, response
 from rest_framework import views, status
 from rest_framework.authtoken.models import Token
-from .models import Expense, UserExpense, UserCustom
-from .serializers import ExpenseSerializer, UserExpenseSerializer,\
-    UserCustomSerializer, CreateUserSerializer
+from .models import Expense, UserCustom
+from .serializers import ExpenseSerializer, UserCustomSerializer,\
+    CreateUserSerializer
 
 
 class ExpenseList(generics.ListCreateAPIView):
@@ -28,16 +28,6 @@ class UserCustomDetail(generics.RetrieveDestroyAPIView):
 
 class CreateUserCustom(generics.CreateAPIView):
     serializer_class = UserCustomSerializer
-
-
-class UserExpenseList(generics.ListCreateAPIView):
-    queryset = UserExpense.objects.all()
-    serializer_class = UserExpenseSerializer
-
-
-class UserExpenseDetail(generics.RetrieveDestroyAPIView):
-    queryset = UserExpense.objects.all()
-    serializer_class = UserExpenseSerializer
 
 
 class CreateUser(generics.CreateAPIView):
