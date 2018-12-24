@@ -37,6 +37,13 @@ class UserCustom(models.Model):
         max_digits=8, decimal_places=2, default=Decimal('0.00'))
     send_notifications = models.BooleanField(default=False)
 
+    def to_json(self):
+        return {
+            "user": self.user__username,
+            "max_value": self.max_value,
+            "send_notifications": self.send_notifications,
+        }
+
     def __str__(self):
         return "%s: \nMax Value: %s | Send Notifications: %s" % \
             (self.user__username, self.max_value, self.send_notifications)
