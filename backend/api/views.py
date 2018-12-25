@@ -21,9 +21,15 @@ class ExpenseList(generics.ListCreateAPIView):
         return Response(serializer.data)
 
 
-class ExpenseDetail(generics.RetrieveDestroyAPIView):
-    queryset = Expense.objects.all()
+class ExpenseDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = (IsAuthenticated, )
     serializer_class = ExpenseSerializer
+    lookup_url_kwarg = 'expense_id'
+
+    def get_queryset(self):
+        expense_id = self.kwargs['expense_id']
+        return Expense.objects.filter(id=expense_id)
 
 
 class CreateExpense(generics.CreateAPIView):
