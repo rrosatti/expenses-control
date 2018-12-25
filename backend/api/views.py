@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, permissions, response
-from rest_framework import views, status
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.authtoken.models import Token
 from .models import Expense, UserCustom
 from .serializers import ExpenseSerializer, UserCustomSerializer,\
@@ -18,7 +21,22 @@ class ExpenseDetail(generics.RetrieveDestroyAPIView):
 
 
 class CreateExpense(generics.CreateAPIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = (IsAuthenticated, )
     serializer_class = ExpenseSerializer
+
+    def get_queryset(self):
+        return Expense.objects.filter(user=self.request.user)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
 
 class UserCustomDetail(generics.RetrieveDestroyAPIView):
