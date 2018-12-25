@@ -11,8 +11,14 @@ from .serializers import ExpenseSerializer, UserCustomSerializer,\
 
 
 class ExpenseList(generics.ListCreateAPIView):
-    queryset = Expense.objects.all()
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = (IsAuthenticated, )
     serializer_class = ExpenseSerializer
+
+    def list(self, request):
+        queryset = Expense.objects.filter(user=request.user)
+        serializer = ExpenseSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ExpenseDetail(generics.RetrieveDestroyAPIView):
