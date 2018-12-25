@@ -19,13 +19,13 @@ class Expense(models.Model):
             "date": self.date,
             "short_desc": self.short_desc,
             "long_desc": self.long_desc,
-            "username": self.user__username,
+            "username": self.user.username,
         }
 
     def __str__(self):
         return "%s/%s/%s - $ %s (%s)" % \
-            (self.date__year, self.date__month,
-                self.date__day, self.value, self.short_desc)
+            (self.date.year, self.date.month,
+                self.date.day, self.value, self.short_desc)
 
     class Meta:
         ordering = ('-date__year', '-date__month', '-date__day',)
@@ -39,11 +39,11 @@ class UserCustom(models.Model):
 
     def to_json(self):
         return {
-            "user": self.user__username,
+            "user": self.user.username,
             "max_value": self.max_value,
             "send_notifications": self.send_notifications,
         }
 
     def __str__(self):
         return "%s: \nMax Value: %s | Send Notifications: %s" % \
-            (self.user__username, self.max_value, self.send_notifications)
+            (self.user.username, self.max_value, self.send_notifications)
