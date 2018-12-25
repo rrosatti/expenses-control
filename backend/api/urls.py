@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import CreateUser, LogoutUser, CreateExpense, ExpenseList
+from .views import CreateUser, LogoutUser, CreateExpense, ExpenseList,\
+    ExpenseDetail
 
 
 urlpatterns = [
@@ -18,5 +19,8 @@ urlpatterns = [
         name='expenses_create_expense'),
     url(r'^expenses/$',
         ExpenseList.as_view(),
-        name='expenses_list_expenses')
+        name='expenses_list_expenses'),
+    url(r'^expenses/(?P<expense_id>[0-9]+)/$',
+        ExpenseDetail.as_view(),
+        name='expenses_get_expense'),
 ]
