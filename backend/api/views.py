@@ -25,8 +25,6 @@ class CreateExpense(generics.CreateAPIView):
     permission_classes = (IsAuthenticated, )
     serializer_class = ExpenseSerializer
 
-    def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.create(user=self.request.user,
