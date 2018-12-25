@@ -28,15 +28,9 @@ class CreateExpense(generics.CreateAPIView):
     def get_queryset(self):
         return Expense.objects.filter(user=self.request.user)
 
-    def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+    def perform_create(self, serializer):
+        serializer.create(user=self.request.user,
+                            validated_data=serializer.validated_data)
 
 
 class UserCustomDetail(generics.RetrieveDestroyAPIView):

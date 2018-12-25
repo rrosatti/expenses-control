@@ -9,12 +9,14 @@ class ExpenseSerializer(serializers.ModelSerializer):
         model = Expense
         fields = ('value', 'date', 'short_desc', 'long_desc')
 
-    def save(self):
-        user = CurrentUserDefault()
-        value = self.validated_data['value']
-        date = self.validated_data['date']
-        short_desc = self.validated_data['short_desc']
-        long_desc = self.validated_data['long_desc']
+    def create(self, user, validated_data):
+        return Expense.objects.create(
+            user=user,
+            value=validated_data['value'],
+            date=validated_data['date'],
+            short_desc=validated_data['short_desc'],
+            long_desc=validated_data['long_desc']
+        )
 
 
 class UserCustomSerializer(serializers.ModelSerializer):
