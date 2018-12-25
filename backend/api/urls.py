@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import CreateUser, LogoutUser, CreateExpense
+from .views import CreateUser, LogoutUser, CreateExpense, ExpenseList
 
 
 urlpatterns = [
@@ -16,4 +16,7 @@ urlpatterns = [
     url(r'^expenses/create/$',
         CreateExpense.as_view(),
         name='expenses_create_expense'),
+    url(r'^expenses/$',
+        ExpenseList.as_view(),
+        name='expenses_list_expenses')
 ]
