@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import CreateUser, LogoutUser, CreateExpense, ExpenseList,\
-    ExpenseDetail
+    ExpenseDetail, CreateUserCustom
 
 
 urlpatterns = [
@@ -23,4 +23,7 @@ urlpatterns = [
     url(r'^expenses/(?P<expense_id>[0-9]+)/$',
         ExpenseDetail.as_view(),
         name='expenses_get_expense'),
+    url(r'^custom/create/$',
+        CreateUserCustom.as_view(),
+        name='custom_create'),
 ]
