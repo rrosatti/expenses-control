@@ -32,7 +32,7 @@ class Expense(models.Model):
 
 
 class UserCustom(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     max_value = models.DecimalField(
         max_digits=8, decimal_places=2, default=Decimal('0.00'))
     send_notifications = models.BooleanField(default=False)
