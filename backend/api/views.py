@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -43,9 +44,18 @@ class CreateExpense(generics.CreateAPIView):
                             validated_data=serializer.validated_data)
 
 
-class UserCustomDetail(generics.RetrieveDestroyAPIView):
-    queryset = UserCustom.objects.all()
+class UserCustomViewSet(viewsets.ViewSet):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = (IsAuthenticated, )
     serializer_class = UserCustomSerializer
+
+    def retrieve(self, request, pk=None):
+        queryset = UserCustom.objects.all()
+        user_custom = get_object_or_404(queryset, user=request.user)
+        serializer = UserCustomSerializer(user_custom)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
 
 
 class CreateUserCustom(generics.CreateAPIView):
