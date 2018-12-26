@@ -41,19 +41,7 @@ class ExpenseViewSet(viewsets.ViewSet):
                 serializer.validated_data,
                 status=status.HTTP_201_CREATED)
 
-        return Response(
-            status=status.HTTP_400_BAD_REQUEST)
-
-
-class CreateExpense(generics.CreateAPIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = (IsAuthenticated, )
-    serializer_class = ExpenseSerializer
-
-
-    def perform_create(self, serializer):
-        serializer.create(user=self.request.user,
-                            validated_data=serializer.validated_data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserCustomViewSet(viewsets.ViewSet):
@@ -69,16 +57,19 @@ class UserCustomViewSet(viewsets.ViewSet):
             serializer.data,
             status=status.HTTP_200_OK)
 
+    def create(self, request):
+        serializer = UserCustomSerializer(data=request.data)
 
-class CreateUserCustom(generics.CreateAPIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = (IsAuthenticated, )
-    serializer_class = UserCustomSerializer
+        if serializer.is_valid():
+            serializer.create(
+                user=request.user,
+                validated_data=serializer.validated_data)
 
+            return Response(
+                serializer.validated_data,
+                status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
-        serializer.create(user=self.request.user,
-                            validated_data=serializer.validated_data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateUser(generics.CreateAPIView):

@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import CreateUser, LogoutUser, CreateUserCustom, \
-    UserCustomViewSet, ExpenseViewSet
+from .views import CreateUser, LogoutUser, UserCustomViewSet, ExpenseViewSet
 
 
 urlpatterns = [
@@ -24,7 +23,7 @@ urlpatterns = [
         ExpenseViewSet.as_view({'get': 'retrieve'}),
         name='expenses_get_expense'),
     url(r'^custom/create/$',
-        CreateUserCustom.as_view(),
+        UserCustomViewSet.as_view({'post': 'create'}),
         name='custom_create'),
     url(r'^custom/$',
         UserCustomViewSet.as_view({'get': 'retrieve'}),
