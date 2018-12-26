@@ -11,7 +11,7 @@ from .serializers import ExpenseSerializer, UserCustomSerializer,\
     CreateUserSerializer
 
 
-class ExpenseList(generics.ListCreateAPIView):
+class ExpenseViewSet(viewsets.ViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = (IsAuthenticated, )
     serializer_class = ExpenseSerializer
@@ -21,16 +21,28 @@ class ExpenseList(generics.ListCreateAPIView):
         serializer = ExpenseSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def retrieve(self, request, expense_id=None):
+        queryset = Expense.objects.all()
+        expense = get_object_or_404(queryset, pk=expense_id)
+        serializer = ExpenseSerializer(expense)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
 
-class ExpenseDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = (IsAuthenticated, )
-    serializer_class = ExpenseSerializer
-    lookup_url_kwarg = 'expense_id'
+    def create(self, request):
+        serializer = ExpenseSerializer(data=request.data)
 
-    def get_queryset(self):
-        expense_id = self.kwargs['expense_id']
-        return Expense.objects.filter(id=expense_id)
+        if serializer.is_valid():
+            serializer.create(
+                user=request.user,
+                validated_data=serializer.validated_data)
+
+            return Response(
+                serializer.validated_data,
+                status=status.HTTP_201_CREATED)
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateExpense(generics.CreateAPIView):
