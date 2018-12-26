@@ -22,7 +22,14 @@ class ExpenseSerializer(serializers.ModelSerializer):
 class UserCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
-        fields = '__all__'
+        fields = ('max_value', 'send_notifications')
+
+    def create(self, user, validated_data):
+        return UserCustom.objects.create(
+            user=user,
+            max_value=validated_data['max_value'],
+            send_notifications=validated_data['send_notifications']
+        )
 
 
 class CreateUserSerializer(serializers.ModelSerializer):

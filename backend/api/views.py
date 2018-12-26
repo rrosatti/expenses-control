@@ -49,7 +49,14 @@ class UserCustomDetail(generics.RetrieveDestroyAPIView):
 
 
 class CreateUserCustom(generics.CreateAPIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = (IsAuthenticated, )
     serializer_class = UserCustomSerializer
+
+
+    def perform_create(self, serializer):
+        serializer.create(user=self.request.user,
+                            validated_data=serializer.validated_data)
 
 
 class CreateUser(generics.CreateAPIView):
