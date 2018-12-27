@@ -27,3 +27,4 @@ adb.*
 *.key
 *.mobileprovision
 haste*
+metro-cache/*
