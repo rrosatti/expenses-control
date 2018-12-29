@@ -15,7 +15,10 @@
         $ python3 manage.py migrate
         $ python3 manage.py createsuperuser
 
-        $ python3 manage.py runserver
+	# if just testing the backend
+          $ python3 manage.py runserver
+	# if testing with an "external" application (e.g. react native app)
+	  $ python3 manage.py runserver <your_ip>:8000
 
 
 3. Testing the endpoints
