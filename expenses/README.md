@@ -9,4 +9,6 @@
 
 2. Run the application
 
-	# sudo npm run android 
+	# change the IP in App.js from 127.0.0.1 to the one used to run the server
+
+	$ sudo npm run android
