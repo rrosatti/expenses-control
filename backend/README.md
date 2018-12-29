@@ -26,6 +26,10 @@
         # login
         $ curl -H "Content-Type: application/json" --request POST -d '{"username":"admin","password":"admin"}' http://127.0.0.1:8000/api/auth/login/ -v
 
+	# create user
+	$ curl -H "Content-Type: application/json" --request POST -d '{"username":"admin4","password":"admin4","first_name":"Admin","last_name":"4","email":"admin4@admin.com"}' http://127.0.0.1:8000/api/auth/register/ -v
+
+
         # create expense
         $ curl -H "Content-Type: application/json" --request POST -d '{"value": "1450.00", "date": "2018-12-25", "short_desc": "this is a short desc", "long_desc": "this is a long desc"}'  http://127.0.0.1:8000/api/expenses/create/ -H 'Authorization: Token <user_token>' -v
 
