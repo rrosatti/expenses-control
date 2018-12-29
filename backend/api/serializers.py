@@ -38,10 +38,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
         write_only=True,
         style={'input_type': 'password'}
     )
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'password', 'first_name', 'last_name')
+        fields = ('username', 'password', 'first_name', 'last_name', 'email')
         write_only_fields = ('is_staff', 'is_superuser', 'is_active',)
 
         def create(self, validated_data):
