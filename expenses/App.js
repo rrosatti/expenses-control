@@ -6,6 +6,7 @@ import Expenses from './src/components/Expenses';
 import ExpenseDetail from './src/components/ExpenseDetail';
 import NewExpense from './src/components/NewExpense';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import axios from 'axios';
 
 
 const AppNavigator = createStackNavigator(
@@ -24,6 +25,12 @@ const AppNavigator = createStackNavigator(
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
+  componentWillMount() {
+    // use the IP you used to run the server instead of 127.0.0.1
+    axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
+    axios.defaults.timeout = 1500;
+  }
+
   render() {
     return (
       <AppContainer />
